@@ -4,7 +4,6 @@ import com.exampleaa.SimpleCRUD.DTO.PokemonDTO;
 import com.exampleaa.SimpleCRUD.Service.PokemonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +13,10 @@ import java.util.List;
 @RequestMapping("/api/pokemons")
 public class PokemonController {
 
-    @Autowired
-    private PokemonService pokemonService;
+    private final PokemonService pokemonService;
+    public PokemonController(PokemonService pokemonService) {
+        this.pokemonService = pokemonService;
+    }
 
     @Operation(summary = "Get all Pokemons")
     @ApiResponse(responseCode = "200", description = "List of all Pokemons")
@@ -32,6 +33,7 @@ public class PokemonController {
         PokemonDTO pokemon = pokemonService.getPokemonById(id);
         return pokemon != null ? ResponseEntity.ok(pokemon) : ResponseEntity.notFound().build();
     }
+
     @Operation(summary = "Create a new Pokemon")
     @ApiResponse(responseCode = "201", description = "Pokemon created successfully")
     @PostMapping
